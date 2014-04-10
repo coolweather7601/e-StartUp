@@ -1,0 +1,36 @@
+﻿
+.content_table
+{
+	border-collapse:separate;
+}
+
+.tdbgt 
+{
+	padding:3px;
+	background-color: #F8F8FF;
+	font-size: 8pt;
+	color: purple;
+	font-family: Verdana;
+}
+
+.tdbgt2 
+{
+	padding:3px;
+	font-size: 9pt;
+	font-family: Verdana;
+}
+
+.tdCon
+{	
+	padding:3px;
+	font-size: 9pt;
+	font-family: Verdana;
+}
+
+.tdTitle
+{
+	background-color:#aaaaaa;
+	font-size: 11pt;
+	text-align:left;
+	font-family: Verdana;
+}
