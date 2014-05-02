@@ -226,7 +226,7 @@ namespace ESC_Web.Alan
                         if (Convert.ToDouble(txtFilterCounter.Text) > 70000) { sb.Append("【濾網次數( AMCC ),<70000】"); }
                         break;
                     case "AMCC":
-                        if (Convert.ToDouble(txtLaserPower.Text) < 7 || Convert.ToDouble(txtLaserPower.Text) > 17) { sb.Append("【雷射能量(AMCC/E&R),7~17Watt】"); }
+                        if (Convert.ToDouble(txtLaserPower.Text) < 7 || Convert.ToDouble(txtLaserPower.Text) > 14) { sb.Append("【雷射能量(AMCC/E&R),7~14Watt】"); }
                         if (Convert.ToDouble(txtCoolWaterAmcc.Text) < 27 || Convert.ToDouble(txtCoolWaterAmcc.Text) > 33) { sb.Append("【冷卻水溫度AMCC,27~33 ℃】"); }
                         if (Convert.ToDouble(txtAmccOperation.Text) > 2700) { sb.Append("【燈管/ 二極體使用時數AMCC,<2700】"); }
                         if (Convert.ToDouble(txtFilterCounter.Text) > 70000) { sb.Append("【濾網次數( AMCC ),<70000】"); }
@@ -237,7 +237,7 @@ namespace ESC_Web.Alan
                         if (Convert.ToDouble(txtErOperation.Text) > 24000) { sb.Append("【燈管/ 二極體使用時數E&R,<24000】"); }
                         break;
                     case "E&R":
-                        if (Convert.ToDouble(txtLaserPower.Text) < 7 || Convert.ToDouble(txtLaserPower.Text) > 17) { sb.Append("【雷射能量(AMCC/E&R),7~17Watt】"); }
+                        if (Convert.ToDouble(txtLaserPower.Text) < 7 || Convert.ToDouble(txtLaserPower.Text) > 14) { sb.Append("【雷射能量(AMCC/E&R),7~14Watt】"); }
                         if (Convert.ToDouble(txtCoolWaterEr.Text) < 24 || Convert.ToDouble(txtCoolWaterEr.Text) > 29) { sb.Append("【冷卻水溫度E&R,24~29 ℃】"); }
                         if (Convert.ToDouble(txtErOperation.Text) > 24000) { sb.Append("【燈管/ 二極體使用時數E&R,<24000】"); }
                         break;

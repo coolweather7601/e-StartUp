@@ -94,7 +94,7 @@
             <tr>
                 <td class="tdbgt">雷射能量<br /> ( Laser Power )</td>
                 <td class="tdCon">
-                        7.0~17.0 Watt(AMCC/E&amp;R)
+                        7.0~14.0 Watt(AMCC/E&amp;R)
                         <br />
                          <asp:TextBox onKeyDown="preventTextEnterEvent();" ID="txtLaserPower" runat="server"></asp:TextBox>
                          <br />

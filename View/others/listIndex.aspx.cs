@@ -68,8 +68,8 @@ namespace ESC_Web.Alan
                                                And s.tester like '%{1}%'
                                                And s.location like'%{2}%'
                                                And L.LOGACTION ='INSERT'
-                                               And l.time >= TO_DATE ('{3}', 'YYYY/MM/DD')
-                                               And l.time <= TO_DATE ('{4}', 'YYYY/MM/DD')
+                                               And l.time >= TO_DATE ('{3} 00:00:00', 'YYYY/MM/DD hh24:mi:ss')
+                                               And l.time <= TO_DATE ('{4} 23:59:59', 'YYYY/MM/DD hh24:mi:ss')
                                          ORDER BY time DESC", sheet_categoryID,
                                                               txtMachine.Text.Trim(), txtLocation.Text.Trim(),
                                                               string.IsNullOrEmpty(txtStart.Text) ? "1001/01/01" : txtStart.Text,
@@ -77,8 +77,6 @@ namespace ESC_Web.Alan
                                                               (ddlMold.SelectedItem.Text.Equals("請選擇")) ? "" : ddlMold.SelectedItem.Text,
                                                               ddlSheet.SelectedValue.Equals("10") ? "" : string.Format(@"Inner join vw_sheet_value vw2 on s.sheetID = vw2.sheetID And (vw2.aspxcontrolid like 'txtBatchCardNo%' and vw2.value like'%{0}%')", txtSearch.Text.Trim())
                                                               );
-
-            
 
             DataTable dt = ado.loadDataTable(str, null, "sheet");
 

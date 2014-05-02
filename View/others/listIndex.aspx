@@ -56,6 +56,7 @@
 
         <h3> Sheet：<asp:DropDownList ID="ddlSheet" AutoPostBack="true" runat="server" onselectedindexchanged="ddlSheet_SelectedIndexChanged"></asp:DropDownList></h3>
         <p>
+        
             <asp:GridView ID="GridView1" runat="server" BorderWidth="1px" BorderStyle="Solid" DataKeyNames="sheetID"
                 BorderColor="#999999" BackColor="White" OnPageIndexChanging="GridView1_PageIndexChanging"
                 AllowPaging="True" OnRowDataBound="GridView1_RowDataBound" OnRowCancelingEdit="GridView1_RowCancelingEdit"
@@ -73,7 +74,8 @@
                             <asp:Label runat="server" Text='' ID="lblBatch"></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:BoundField DataField="time" HeaderText="LogTime" ReadOnly="True"></asp:BoundField>
+                    <%--<asp:BoundField DataField="time" HeaderText="LogTime" ReadOnly="True"></asp:BoundField>--%>
+                    <asp:BoundField DataField="time" HeaderText="LogTime" ReadOnly="True" dataformatstring="{0:yyyy/MM/dd HH:mm:ss}"></asp:BoundField>                    
                     <asp:TemplateField HeaderText="Change Kind">
                         <ItemTemplate>
                             <asp:Label runat="server" Text='' ID="lblStatus"></asp:Label>
