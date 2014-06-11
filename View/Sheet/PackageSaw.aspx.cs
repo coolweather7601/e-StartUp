@@ -267,9 +267,9 @@ namespace ESC_Web.Alan
             }
             #endregion
             #region CO2 阻抗值 0.2 ~ 0.6 Mohm(HVSON12 只能在 TS05 (有 CO2 bubbler 的機台) 上切)
-            //#SA610
-            //DS-053 
-            if (tester.Contains("DS-053") && packageStr.Contains(PackageType.HVSON.ToString()))
+            //#SA610 -> #SA609 (2014-06-11)
+            //DS-053 -> DS-050
+            if (tester.Contains("DS-050") && packageStr.Contains(PackageType.HVSON.ToString()))
             {
                 if (packageStr.Contains(PackageType.HVSON12.ToString()))
                 {
@@ -348,9 +348,9 @@ namespace ESC_Web.Alan
                 trEmulsion.Style.Add("display", "none");
             }
 
-            //#SA610
-            //DS-053 
-            if (!machine.Contains("DS-053"))
+            //#SA610 -> #SA609(2014-06-11)
+            //DS-053 -> DS-050
+            if (!machine.Contains("DS-050"))
             {
                 trCo2Bubbler.Style.Add("display", "none");
             }
@@ -386,9 +386,9 @@ namespace ESC_Web.Alan
                     }
                 }
 
-                //#SA610
-                //DS-053 
-                if (tester.Contains("DS-053") && packageStr.Contains(PackageType.HVSON.ToString()))
+                //#SA610 -> #SA609(2014-06-11)
+                //DS-053 -> DS-050
+                if (tester.Contains("DS-050") && packageStr.Contains(PackageType.HVSON.ToString()))
                 {
                     if (string.IsNullOrEmpty(txtCo2Bubbler.Text)) { sb.Append(string.Format(@"【{0}CO2 阻抗值 (Mohm)】", PackageType.HVSON.ToString())); }
                 }
@@ -419,9 +419,9 @@ namespace ESC_Web.Alan
                     }
                 }
 
-                //#SA610
-                //DS-053 
-                if (tester.Contains("DS-053") && packageStr.Contains(PackageType.HVSON.ToString()))
+                //#SA610 ->#SA609 (2014-06-11)
+                //DS-053 -> DS-050
+                if (tester.Contains("DS-050") && packageStr.Contains(PackageType.HVSON.ToString()))
                 {
                     if (!val.IsFloat(txtCo2Bubbler.Text.Trim())) { sb.Append(string.Format(@"【{0}CO2 阻抗值 (Mohm)】", PackageType.HVSON.ToString())); }
                 }
