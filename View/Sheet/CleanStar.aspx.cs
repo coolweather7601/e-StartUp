@@ -25,7 +25,8 @@ namespace ESC_Web.Alan
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
+            {            
+
                 sheet_categoryID = Request.QueryString["sheet_categoryID"];
                 sheetID = Request.QueryString["sheetID"];
                 

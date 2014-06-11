@@ -97,7 +97,7 @@ namespace ESC_Web.Alan
                         //==================================================================================================
                         //after clean mold
                         //==================================================================================================
-                        if (dr["aspxControlID"].ToString().Equals("ddlStatus") && dr["value"].ToString().Equals("8"))
+                        if (dr["aspxControlID"].ToString().Equals("ddlStatus") && dr["value"].ToString().Equals("換模後|After clean mold"))
                         {
                             lblAlert.Visible = true;
                             txtUpMold1.Visible = true;
