@@ -33,7 +33,8 @@
                      <asp:TextBox onKeyDown="preventTextEnterEvent();" ID="txtLocation" runat="server"></asp:TextBox></td>
                 <td style="text-align:left;">
                     <asp:Button ID="btnSearch" OnClick="btnSearch_Click" runat="server" Text="Serach"
-                        CssClass="btn btn-success"></asp:Button></td>
+                        CssClass="btn btn-success"></asp:Button>
+                </td>
             </tr>
             <tr style="text-align: right">
                 <td>
@@ -48,7 +49,7 @@
                 <td style="text-align:left;">
                      <asp:TextBox onKeyDown="preventTextEnterEvent();" ID="txtEnd" runat="server"></asp:TextBox><cc1:CalendarExtender ID="CalendarExtender2"
                         runat="server" Format="yyyy/MM/dd" TargetControlID="txtEnd">
-                    </cc1:CalendarExtender>
+                    </cc1:CalendarExtender><asp:ImageButton ID="ibtnOutput" ImageUrl="../../Images/excel.jpg" runat="server" onclick="ibtnOutput_Click" ToolTip="download reporting" />
                 </td>
             </tr>
         </tbody>

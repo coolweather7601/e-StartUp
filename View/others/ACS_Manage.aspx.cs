@@ -53,15 +53,22 @@ namespace ESC_Web.Alan
         {
             ado = new Common.AdoDbConn(Common.AdoDbConn.AdoDbType.Oracle, Conn);
             DataTable dt = new DataTable();
-            string str = string.Format(@"Select am.acs_manageid,am.tester,am.location,am.sheet_categoryid,sc.describes as sc_desc
+            //string str = string.Format(@"Select am.acs_manageid,am.tester,am.location,am.sheet_categoryid,sc.describes as sc_desc
+            //                             From acs_manage am 
+            //                             Inner join sheet_category sc on am.sheet_categoryid=sc.sheet_categoryid
+            //                             Where  am.tester like '%{0}%'
+            //                                    And am.location like '%{1}%'
+            //                                    {2}
+            //                             Order By ACS_ManageID desc", txtTester.Text.Trim().ToUpper(),
+            //                                                         txtLocation.Text.Trim().ToUpper(),
+            //                                                         ddlSheet.SelectedValue.Equals("0") ? "" : " And am.sheet_categoryid='" + ddlSheet.SelectedValue + "'");
+            string str = string.Format(@"Select am.acs_manageid,am.tester,am.sheet_categoryid,sc.describes as sc_desc
                                          From acs_manage am 
                                          Inner join sheet_category sc on am.sheet_categoryid=sc.sheet_categoryid
                                          Where  am.tester like '%{0}%'
-                                                And am.location like '%{1}%'
-                                                {2}
+                                                {1}
                                          Order By ACS_ManageID desc", txtTester.Text.Trim().ToUpper(),
-                                                                     txtLocation.Text.Trim().ToUpper(),
-                                                                     ddlSheet.SelectedValue.Equals("0") ? "" : " And am.sheet_categoryid='" + ddlSheet.SelectedValue + "'");
+                                                                      ddlSheet.SelectedValue.Equals("0") ? "" : " And am.sheet_categoryid='" + ddlSheet.SelectedValue + "'");
 
             dt = ado.loadDataTable(str, null, "ACS_Manage");
             GridViewAM.DataSource = dt;
@@ -107,7 +114,7 @@ namespace ESC_Web.Alan
         protected void GridViewAM_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             TextBox gv_txtTester = (TextBox)GridViewAM.Rows[e.RowIndex].Cells[0].FindControl("gv_txtTester");
-            TextBox gv_txtLocation = (TextBox)GridViewAM.Rows[e.RowIndex].Cells[0].FindControl("gv_txtLocation");
+            //TextBox gv_txtLocation = (TextBox)GridViewAM.Rows[e.RowIndex].Cells[0].FindControl("gv_txtLocation");
             DropDownList gv_ddlSheet = (DropDownList)GridViewAM.Rows[e.RowIndex].Cells[0].FindControl("gv_ddlSheet");
 
             string pk = GridViewAM.DataKeys[e.RowIndex].Value.ToString();
@@ -117,7 +124,7 @@ namespace ESC_Web.Alan
             bool check = true;
 
             if (string.IsNullOrEmpty(gv_txtTester.Text)) { sb.Append("【Tester】"); }
-            if (string.IsNullOrEmpty(gv_txtLocation.Text)) { sb.Append("【Location】"); }
+            //if (string.IsNullOrEmpty(gv_txtLocation.Text)) { sb.Append("【Location】"); }
             if (gv_ddlSheet.SelectedValue.Equals("0")) { sb.Append("【Sheet】"); }
             if (!string.IsNullOrEmpty(sb.ToString())) { check = false; sb.Insert(0, "以下欄位未填\\n\\n"); }
 
@@ -130,24 +137,30 @@ namespace ESC_Web.Alan
                 DataTable tester_dt = ado.loadDataTable(TestStr, null, "ACS_Manage");
                 if (tester_dt.Rows.Count > 0) { sb.Append("【Tester】"); }
                 
-                string LocationStr = string.Format(@"Select * From ACS_Manage Where location='{0}' And location!='{1}'", gv_txtLocation.Text.Trim().ToUpper(),old_dt.Rows[0]["location"].ToString());
-                DataTable Location_dt = ado.loadDataTable(LocationStr, null, "ACS_Manage");
-                if (Location_dt.Rows.Count > 0) { sb.Append("【Location】"); }
+                //string LocationStr = string.Format(@"Select * From ACS_Manage Where location='{0}' And location!='{1}'", gv_txtLocation.Text.Trim().ToUpper(),old_dt.Rows[0]["location"].ToString());
+                //DataTable Location_dt = ado.loadDataTable(LocationStr, null, "ACS_Manage");
+                //if (Location_dt.Rows.Count > 0) { sb.Append("【Location】"); }
                 if (!string.IsNullOrEmpty(sb.ToString())) { check = false; sb.Insert(0, "以下欄位重複定義，請檢查\\n\\n"); }
             }
 
             if (check)
             {
                 ado = new Common.AdoDbConn(Common.AdoDbConn.AdoDbType.Oracle, Conn);
+                //string str = string.Format(@"Update ACS_Manage 
+                //                             Set    tester = '{0}',
+                //                                    Location ='{1}',
+                //                                    sheet_categoryID='{2}'
+                //                             Where  ACS_ManageID = '{3}'", gv_txtTester.Text.Trim().ToUpper(),
+                //                                                          gv_txtLocation.Text.Trim().ToUpper(),
+                //                                                          gv_ddlSheet.SelectedValue,
+                //                                                          pk);
                 string str = string.Format(@"Update ACS_Manage 
                                              Set    tester = '{0}',
-                                                    Location ='{1}',
-                                                    sheet_categoryID='{2}'
-                                             Where  ACS_ManageID = '{3}'", gv_txtTester.Text.Trim().ToUpper(),
-                                                                          gv_txtLocation.Text.Trim().ToUpper(),
-                                                                          gv_ddlSheet.SelectedValue,
-                                                                          pk);
-                //ado.dbNonQuery(str, null);
+                                                    sheet_categoryID='{1}'
+                                             Where  ACS_ManageID = '{2}'", gv_txtTester.Text.Trim().ToUpper(),
+                                                                           gv_ddlSheet.SelectedValue,
+                                                                           pk);
+
                 string reStr = (string)ado.dbNonQuery(str, null);
                 if (reStr.ToUpper().Contains("SUCCESS"))
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "js", "alert('該筆資料修改成功。');", true);
@@ -323,14 +336,14 @@ namespace ESC_Web.Alan
         {
             ado = new Common.AdoDbConn(Common.AdoDbConn.AdoDbType.Oracle, Conn);
             TextBox dv_txtTester = ((TextBox)DetailsView1.FindControl("dv_txtTester"));
-            TextBox dv_txtLocation = ((TextBox)DetailsView1.FindControl("dv_txtLocation"));
+            //TextBox dv_txtLocation = ((TextBox)DetailsView1.FindControl("dv_txtLocation"));
             DropDownList dv_ddlSheet = ((DropDownList)DetailsView1.FindControl("dv_ddlSheet")); 
             //Check
             sb = new StringBuilder();
             bool check = true;
 
             if (string.IsNullOrEmpty(dv_txtTester.Text)) { sb.Append("【Tester】"); }
-            if (string.IsNullOrEmpty(dv_txtLocation.Text)) { sb.Append("【Location】"); }
+            //if (string.IsNullOrEmpty(dv_txtLocation.Text)) { sb.Append("【Location】"); }
             if (dv_ddlSheet.SelectedValue.Equals("0")) { sb.Append("【Sheet】"); }
             if (!string.IsNullOrEmpty(sb.ToString())) { check = false; sb.Insert(0, "以下欄位未填\\n\\n"); }
 
@@ -339,18 +352,22 @@ namespace ESC_Web.Alan
                 string TestStr = string.Format(@"Select * From ACS_Manage Where tester='{0}'", dv_txtTester.Text.Trim().ToUpper());
                 DataTable tester_dt = ado.loadDataTable(TestStr, null, "ACS_Manage");
                 if (tester_dt.Rows.Count > 0) { sb.Append("【Tester】"); }
-                string LocationStr = string.Format(@"Select * From ACS_Manage Where location='{0}'", dv_txtLocation.Text.Trim().ToUpper());
-                DataTable Location_dt = ado.loadDataTable(LocationStr, null, "ACS_Manage");
-                if (Location_dt.Rows.Count > 0) { sb.Append("【Location】"); }
+                //string LocationStr = string.Format(@"Select * From ACS_Manage Where location='{0}'", dv_txtLocation.Text.Trim().ToUpper());
+                //DataTable Location_dt = ado.loadDataTable(LocationStr, null, "ACS_Manage");
+                //if (Location_dt.Rows.Count > 0) { sb.Append("【Location】"); }
                 if (!string.IsNullOrEmpty(sb.ToString())) { check = false; sb.Insert(0, "以下欄位重複定義，請檢查\\n\\n"); }
             }
 
             if (check)
             {
-                string sqlStr = string.Format(@"Insert into ACS_Manage(ACS_ManageID,Tester,Location,sheet_categoryID)
-                                                Values (Acs_Manage_sequence.nextval,:Tester,:Location,:sheet_categoryID)");
-                object[] para = new object[] { dv_txtTester.Text.Trim().ToUpper(), dv_txtLocation.Text.Trim().ToUpper(), dv_ddlSheet.SelectedValue };
-                //ado.dbNonQuery(sqlStr, para);
+                //string sqlStr = string.Format(@"Insert into ACS_Manage(ACS_ManageID,Tester,Location,sheet_categoryID)
+                //                                Values (Acs_Manage_sequence.nextval,:Tester,:Location,:sheet_categoryID)");
+                //object[] para = new object[] { dv_txtTester.Text.Trim().ToUpper(), dv_txtLocation.Text.Trim().ToUpper(), dv_ddlSheet.SelectedValue };
+                string sqlStr = string.Format(@"Insert into ACS_Manage(ACS_ManageID,Tester,sheet_categoryID)
+                                                Values (Acs_Manage_sequence.nextval,:Tester,:sheet_categoryID)");
+                object[] para = new object[] { dv_txtTester.Text.Trim().ToUpper(), dv_ddlSheet.SelectedValue };
+                
+
                 string reStr = (string)ado.dbNonQuery(sqlStr, para);
                 if (reStr.ToUpper().Contains("SUCCESS"))
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "js", "alert('該筆資料新增成功。');", true);

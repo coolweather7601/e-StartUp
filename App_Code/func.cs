@@ -210,7 +210,13 @@ namespace ESC_Web.Alan.Common
                 }
                 else
                 {
-                    HttpContext.Current.Response.Redirect("../../ESC_Login.aspx");
+                    String originalPath = new Uri(HttpContext.Current.Request.Url.AbsoluteUri).OriginalString;
+                    String parentDirectory = originalPath.Substring(0, originalPath.LastIndexOf("/"));
+                    if (originalPath.LastIndexOf("?") > 0)
+                    {
+                        string parameters = originalPath.Substring(originalPath.LastIndexOf("?"), originalPath.Length - originalPath.LastIndexOf("?"));
+                        HttpContext.Current.Response.Redirect("../../ESC_Login.aspx" + parameters);
+                    }
                 }
             }
         }
@@ -249,8 +255,8 @@ namespace ESC_Web.Alan.Common
                             //==================================================================================
                             if (gvID.Equals("GridViewAM") && ((Convert.ToInt32(HttpContext.Current.Session["RoleID"]) == (int)Role.Administrator) || (Convert.ToInt32(HttpContext.Current.Session["RoleID"]) == (int)Role.Supervisor)))
                             {
+                                ((GridView)ctr).Columns[3].Visible = true;
                                 ((GridView)ctr).Columns[4].Visible = true;
-                                ((GridView)ctr).Columns[5].Visible = true;
                             }
 
 

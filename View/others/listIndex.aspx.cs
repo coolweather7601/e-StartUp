@@ -9,6 +9,11 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Collections.Generic;
+//NOPI
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using System.IO;
 
 namespace ESC_Web.Alan
 {
@@ -348,5 +353,159 @@ namespace ESC_Web.Alan
         }
         #endregion
 
-    }
+
+        protected void ibtnOutput_Click(object sender, ImageClickEventArgs e)
+        {
+            ado = new Common.AdoDbConn(Common.AdoDbConn.AdoDbType.Oracle, Conn);
+            string str = string.Format(@"Select sv.sheet_categoryid,sc.describes,sv.sheetid,sv.tester,sv.location,sv.timeshift,sv.op,itemid,item_desc,spec,sv.sheet_valueid, sv.value,time 
+                                         From vw_sheet_value sv
+                                         Inner join vw_sheet_log l 
+                                            On sv.sheetID=l.sheetid
+                                         Inner join sheet_category sc
+                                            On sv.sheet_categoryid= sc.sheet_categoryid
+                                         Where l.logaction='INSERT' 
+                                            And l.time >= TO_DATE ('{0} 00:00:00', 'YYYY/MM/DD hh24:mi:ss') 
+                                            And l.time <= TO_DATE ('{1} 23:59:59', 'YYYY/MM/DD hh24:mi:ss')
+                                         Order by sheetid", string.IsNullOrEmpty(txtStart.Text) ? "1001/01/01" : txtStart.Text,
+                                                                                                  string.IsNullOrEmpty(txtEnd.Text) ? "9999/12/31" : txtEnd.Text);
+            DataTable dt = ado.loadDataTable(str, null, "vw_sheet_value");
+
+
+            //=================================================================================
+            //Excel
+            //=================================================================================
+
+            string title = "eStartUp check list Reporting";
+            HSSFWorkbook hssfWorkBook_1 = new HSSFWorkbook();
+
+            #region sheet1
+            HSSFSheet sheet = (NPOI.HSSF.UserModel.HSSFSheet)hssfWorkBook_1.CreateSheet(title);
+            IRow row; ICell cell;
+            bool isOnly = false;
+            int Row_Count = 0;
+            int Cell_Count = 0;
+
+
+            row = sheet.CreateRow(Row_Count);
+            string[] xls_title = new string[] { "Sheet_categoryid","describes", "Sheetid", "Tester", "Location", "Timeshift", 
+                                                "Op", "Itemid", "Item_desc", "Spec", "Sheet_valueid",
+                                                "Value", "Time" };
+            foreach (string _title in xls_title)
+            {
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(_title.ToString());
+                Cell_Count++;
+            }
+            if (isOnly == false)
+            {
+                sheet.SetAutoFilter(CellRangeAddress.ValueOf(string.Format(@"A{0}:M{0}", Row_Count + 1)));//Fliter
+                sheet.CreateFreezePane(Cell_Count, Row_Count + 1);//Freeze
+                isOnly = true;
+            }
+            Row_Count += 1;
+
+            //set value
+            foreach (DataRow dr in dt.Rows)
+            {
+                Cell_Count = 0;
+                row = sheet.CreateRow(Row_Count);
+                
+                //Sheet_categoryid
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Sheet_categoryid"].ToString());
+                Cell_Count++;
+
+                //describes
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["describes"].ToString());
+                Cell_Count++;
+
+                //Sheetid
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Sheetid"].ToString());
+                Cell_Count++;
+
+                //Tester
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Tester"].ToString());
+                Cell_Count++;
+
+                //Location
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Location"].ToString());
+                Cell_Count++;
+
+                //Timeshift
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["timeshift"].ToString());
+                Cell_Count++;
+
+                //Op
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Op"].ToString());
+                Cell_Count++;
+
+                //Itemid
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Itemid"].ToString());
+                Cell_Count++;
+
+                //Item_desc
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Item_desc"].ToString());
+                Cell_Count++;
+
+                //Spec
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["spec"].ToString());
+                Cell_Count++;
+
+                //sheet_valueid
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["sheet_valueid"].ToString());
+                Cell_Count++;
+
+                //value
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Value"].ToString());
+                Cell_Count++;
+
+                //time
+                cell = row.CreateCell(Cell_Count);
+                cell.SetCellValue(dr["Time"].ToString());
+                Cell_Count++;
+                Row_Count++;
+            }
+            #endregion
+
+            //Save File (\download\..)
+            string path = Request.PhysicalApplicationPath + "Download\\reporting\\" + string.Format(@"{0}_Output.xls", DateTime.Now.ToString("yyyy-MM-dd-mm"));
+            string downloadPath = "../../Download/reporting/" + string.Format(@"{0}_Output.xls", DateTime.Now.ToString("yyyy-MM-dd-mm"));
+            FileStream fs = new FileStream(path, FileMode.Create);
+            hssfWorkBook_1.Write(fs);
+
+            fs.Close();
+            fs.Dispose();
+
+            if (File.Exists(path))
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", string.Format(@"window.open('{0}');", downloadPath), true);
+                //try
+                //{
+                //    HttpContext.Current.Response.Clear();
+                //    System.Net.WebClient wc = new System.Net.WebClient(); //呼叫 webclient 方式做檔案下載
+                //    byte[] xfile = null;
+                //    xfile = wc.DownloadData(path);
+                //    string xfileName = System.IO.Path.GetFileName(path);
+                //    HttpContext.Current.Response.AddHeader("content-disposition", "attachment;filename=" + HttpContext.Current.Server.UrlEncode(xfileName));
+                //    HttpContext.Current.Response.ContentType = "application/octet-stream"; //二進位方式
+                //    //// 檔案類型還有下列幾種"application/pdf"、"application/vnd.ms-excel"、"text/xml"、"text/HTML"、"image/JPEG"、"image/GIF"
+                //    HttpContext.Current.Response.BinaryWrite(xfile); //內容轉出作檔案下載
+                //    HttpContext.Current.Response.End();
+                //}
+                //catch (Exception ex)
+                //{ Console.WriteLine(ex.ToString()); }
+            }
+        }
+}
 }

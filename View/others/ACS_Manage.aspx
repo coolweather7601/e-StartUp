@@ -9,18 +9,18 @@
     <table>
         <tr>
             <td>Sheet：</td>
-            <td colspan="4">
+            <td>
                 <asp:DropDownList ID="ddlSheet" runat="server">
                 </asp:DropDownList>
             </td>
-        </tr>
-        <tr>
             <td>Tester：</td>
             <td><asp:TextBox ID="txtTester" runat="server"></asp:TextBox></td>
-            <td>Location：</td>
-            <td><asp:TextBox ID="txtLocation" runat="server"></asp:TextBox></td>
             <td style="text-align:right;"><asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" /></td>
         </tr>
+        <%--<tr>
+            <td>Location：</td>
+            <td><asp:TextBox ID="txtLocation" runat="server"></asp:TextBox></td>            
+        </tr>--%>
         <tr>    
             <td colspan="5"><asp:Button ID="btnNew" runat="server" Visible="false" Text="New Data" OnClick="btnNew_Click" /></td>
         </tr>       
@@ -51,7 +51,7 @@
                     </ItemTemplate>
                     <HeaderStyle Width="30%" />
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Location" SortExpression="Location">
+                <%--<asp:TemplateField HeaderText="Location" SortExpression="Location">
                     <EditItemTemplate>
                         <asp:TextBox id="gv_txtLocation" Text='<%# Bind("Location") %>' runat="server"></asp:TextBox>
                     </EditItemTemplate>
@@ -59,7 +59,7 @@
                         <asp:Label ID="Label2" runat="server" Text='<%# Bind("Location") %>'></asp:Label>
                     </ItemTemplate>
                     <HeaderStyle Width="30%" />
-                </asp:TemplateField>
+                </asp:TemplateField>--%>
                 <asp:TemplateField HeaderText="Sheet" SortExpression="Location">
                     <EditItemTemplate>
                         <asp:DropDownList ID="gv_ddlSheet" runat="server">
@@ -128,14 +128,14 @@
                             <asp:Label ID="Label4" runat="server" Text='<%# Bind("Tester") %>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>     
-                    <asp:TemplateField HeaderText="Location">
+                    <%--<asp:TemplateField HeaderText="Location">
                         <InsertItemTemplate>
                             <asp:TextBox ID="dv_txtLocation" runat="server" Text='<%# Bind("Location") %>'></asp:TextBox>
                         </InsertItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label5" runat="server" Text='<%# Bind("Location") %>'></asp:Label>
                         </ItemTemplate>
-                    </asp:TemplateField>
+                    </asp:TemplateField>--%>
                     <asp:TemplateField HeaderText="Sheet">
                         <InsertItemTemplate>
                             <asp:DropDownList ID="dv_ddlSheet" runat="server">

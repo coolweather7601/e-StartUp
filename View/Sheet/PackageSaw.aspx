@@ -179,8 +179,8 @@
                     </td>
                 </tr>
                 <tr id="trCo2Bubbler" runat="server">
-                    <td class="tdbgt">水阻值<br /> Water Resistant<br />
-                        (HVSON12 只能在 #SA610 (有 CO2 bubbler 的機台) 上切)
+                    <td class="tdbgt">水阻值<br /> Water Resistant<br />(HVSON12 and HWSON8 (BGU8053) 只能在 #SA609 (有 CO2 bubbler) 上切割) 
+                        <%--(HVSON12 只能在 #SA610 (有 CO2 bubbler 的機台) 上切)--%>
                     </td>
                     <td class="tdbgt2">0.2 ~ 0.6 Mohm</td>
                     <td class="tdCon" colspan="2">
